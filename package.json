@@ -7,8 +7,8 @@
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "aws:b-deploy": "npm run build && cd aws-cdk && cdk bootstrap && cdk deploy",
-    "aws:deploy": "npm run build && cd aws-cdk && cdk deploy",
+    "aws:b-deploy": "npm run build && cd aws-cdk && cdk bootstrap --profile rsSchoolDev && cdk deploy --profile rsSchoolDev",
+    "aws:deploy": "npm run build && cd aws-cdk && cdk deploy --profile rsSchoolDev",
     "aws:destroy": "cd aws-cdk && cdk destroy -f"
   },
   "dependencies": {
