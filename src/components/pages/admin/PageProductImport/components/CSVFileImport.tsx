@@ -31,27 +31,36 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
 
   const uploadFile = async (e: any) => {
       // Get the presigned URL
-      const response = await axios({
-        method: 'GET',
-        url,
-        params: {
-          name: encodeURIComponent(file.name)
-        }
-      })
-      console.log('File to upload: ', file.name)
-      console.log('Uploading to: ', response.data)
-      const result = await fetch(response.data.signedUrl, {
-        method: 'PUT',
-        body: file,
-      });
-      console.log("Result: ", result);
-      /*const result = await axios({
-        url: response.data.signedUrl,
-        method: 'PUT',
-        headers: { "Content-Length": new Blob([file]).size }
-      })*/
-      console.log('Result: ', result)
-      setFile('');
+      const authorizationToken = localStorage.getItem('authorization_token');
+      const headers = {Authorization: `Basic ${authorizationToken}`};
+      try {
+        const response = await axios({
+          method: 'GET',
+          url,
+          headers,
+          params: {
+            name: encodeURIComponent(file.name)
+          }
+        })
+
+        console.log('File to upload: ', file.name)
+        console.log('Uploading to: ', response.data)
+        const result = await fetch(response.data.signedUrl, {
+          method: 'PUT',
+          body: file,
+        });
+        /*const result = await axios({
+          url: response.data.signedUrl,
+          method: 'PUT',
+          headers: { "Content-Length": new Blob([file]).size }
+        })*/
+        console.log('Result: ', result)
+        alert('CSVFileImport function success: file uploaded!')
+        setFile('');
+      } catch (e) {
+        console.log(`CSVFileImport function error:${authorizationToken} : headers: ${JSON.stringify(headers)} ${JSON.stringify(e)}`);
+        // alert('CSVFileImport function error: Unauthorized: Please check your credentials and try again.');
+      }
     }
   ;
 
